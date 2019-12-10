@@ -11,26 +11,37 @@ void UBullCowCartridge::BeginPlay() // When the game starts
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
 {
-    // if (bGameOver) 
-    // {
-    //     ClearScreen();
-    //     SetupGame();
-    // }
-    // else 
-    // {
-    //     if ( Input == HiddenWord ) 
-    //     {
-    //         PrintLine("You have won!");
-    //         EndGame();
-    //     } 
-    //     else 
-    //     {
-    //         if (Input.Len() != HiddenWord.Len()) {
-    //             PrintLine(TEXT("The hidden word is %i letters long, you have lost!"), HiddenWord.Len());
-    //             EndGame();
-    //         }
-    //     }
-    // }
+    if (bGameOver) 
+    {
+        ClearScreen();
+        SetupGame();
+    }
+    else 
+    {
+        
+        if ( Input == HiddenWord ) 
+        {
+            PrintLine("You have won!");
+            EndGame();
+        } 
+        else 
+        {
+            Lives--;
+            PrintLine(TEXT("You have lost a life!"));
+            if (Lives > 0) 
+            {
+                if (Input.Len() != HiddenWord.Len()) 
+                {
+                    PrintLine(TEXT("Sorry! Try guessing again.\nYou have %i lives remaining."), Lives);
+                }
+            }
+            else 
+            {
+                PrintLine(TEXT("You have no lives left!"));
+                EndGame();
+            }
+        }
+    }
 }
 
 void UBullCowCartridge::SetupGame() 
