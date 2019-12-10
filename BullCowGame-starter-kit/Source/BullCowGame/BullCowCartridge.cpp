@@ -6,29 +6,32 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     Super::BeginPlay();
     SetupGame(); // Setting up Game
 
-    PrintLine(TEXT("The HiddenWord is: %s"), *HiddenWord); // Debug line
-
-    // Welcoming the Player
-    PrintLine(TEXT("Welcome to Bull + Cows!"));
-    PrintLine(TEXT("Guess the %i letter word."), HiddenWord.Len()); // Magic number remove!
-    PrintLine(TEXT("Press Tab to begin, enter something!"));
-    
-    // Prompt player for guess
+    // PrintLine(TEXT("The HiddenWord is: %s"), *HiddenWord); // Debug line
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
 {
     ClearScreen();
 
+    // If game is over then do ClearScreen and SetupGame
     // Checking the player guess
 
-    if ( Input == HiddenWord ) {
-        PrintLine("That is the hidden word, you won!");
-    } else {
-        if (Input.Len() != HiddenWord.Len()) {
-            PrintLine(TEXT("The hidden word is %i letters long!"), HiddenWord.Len());
+    if (bGameOver) 
+    {
+        ClearScreen();
+        SetupGame();
+    }
+    else 
+    {
+        if ( Input == HiddenWord ) {
+            PrintLine("That is the hidden word, you won!");
         } else {
+            if (Input.Len() != HiddenWord.Len()) {
+                PrintLine(TEXT("The hidden word is %i letters long!"), HiddenWord.Len());
+                EndGame();
+            } else {
 
+            }
         }
     }
 
@@ -51,6 +54,20 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
 
 void UBullCowCartridge::SetupGame() 
 {
-    HiddenWord = TEXT("cake");
+    bGameOver = false;
+    HiddenWord = TEXT("cakes");
 	Lives = 4;
+
+    // Welcoming the Player
+    PrintLine(TEXT("Welcome to Bull + Cows!"));
+    PrintLine(TEXT("Guess the %i letter word."), HiddenWord.Len()); // Magic number remove!
+    // Prompt player for guess
+    PrintLine(TEXT("Press Tab to begin, enter something!"));
+}
+
+void UBullCowCartridge::EndGame()
+{
+    bGameOver = true;
+    PrintLine("You lost!");
+    PrintLine("Press enter to continue.");
 }
